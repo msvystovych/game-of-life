@@ -60,7 +60,6 @@ public class GameOfLife {
 
                 // prev cell is equal to next generation
                 cells = nextGenerationCells;
-                // call update to print every <interval> milliseconds
                 print();
             }
         };
