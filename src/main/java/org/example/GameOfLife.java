@@ -1,8 +1,8 @@
 package org.example;
 
 import org.example.model.Cell;
+import org.example.model.Point;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
@@ -45,12 +45,18 @@ public class GameOfLife {
                     int index = cells.indexOf(cell);
                     int neighbours = countNeighbours(index);
                     if (cell.alive) {
-                        if (neighbours < 2) {nextGenerationCells.add(new Cell(false));} else if (neighbours == 2 || neighbours == 3) {
+                        if (neighbours < 2) {
+                            nextGenerationCells.add(new Cell(false));
+                        } else if (neighbours == 2 || neighbours == 3) {
                             nextGenerationCells.add(new Cell(true));
                         } else if (neighbours > 3) {
                             nextGenerationCells.add(new Cell(false));
                         }
-                    } else if (neighbours == 3) {nextGenerationCells.add(new Cell(true));} else {nextGenerationCells.add(new Cell(false));}
+                    } else if (neighbours == 3) {
+                        nextGenerationCells.add(new Cell(true));
+                    } else {
+                        nextGenerationCells.add(new Cell(false));
+                    }
                 }
                 System.out.println("Generation: " + generation++);
 
@@ -63,7 +69,6 @@ public class GameOfLife {
     }
 
     private static void addDeadCells() {
-        // add dead cells
         for (int i = 0; i < rows * cols; i++) {
             cells.add(new Cell(false));
         }
@@ -72,7 +77,7 @@ public class GameOfLife {
     public static int countNeighbours(int ind) {
         int count = 0;
         int top = ind + cols;
-        int bot = ind - cols;
+        int bottom = ind - cols;
 
         // northwest
         if (top - 1 < cells.size() && cells.get(top - 1).alive) {count++;}
@@ -87,19 +92,19 @@ public class GameOfLife {
         if (ind + 1 < cells.size() && cells.get(ind + 1).alive) {count++;}
 
         // southwest
-        if (bot - 1 > -1 && cells.get(bot - 1).alive) {count++;}
+        if (bottom - 1 > -1 && cells.get(bottom - 1).alive) {count++;}
         // south
-        if (bot > -1 && cells.get(bot).alive) {count++;}
+        if (bottom > -1 && cells.get(bottom).alive) {count++;}
         // southeast
-        if (bot + 1 > -1 && cells.get(bot + 1).alive) {count++;}
+        if (bottom + 1 > -1 && cells.get(bottom + 1).alive) {count++;}
 
         return count;
     }
 
     public static void editCell(Point cell, boolean alive) {
         // cols * y + x to find index of cell at x, y
-        if (cell.x < cols && cell.y < rows) {
-            cells.get(cols * cell.y + cell.x).alive = alive;
+        if (cell.getX() < cols && cell.getY() < rows) {
+            cells.get(cols * cell.getY() + cell.getX()).alive = alive;
         }
     }
 
