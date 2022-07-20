@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.model.Cell;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
@@ -36,37 +38,26 @@ public class GameOfLife {
         return new TimerTask() {
             @Override
             public void run() {
+                ArrayList<Cell> nextGenerationCells = new ArrayList<>();
 
-                // list that stores next generation
-                ArrayList<Cell> nextCells = new ArrayList<>();
-
-                // foreach cell in prev generation...
+                // go through cells from the previous generation
                 for (Cell cell : cells) {
-
-                    // get its pos. in list
                     int index = cells.indexOf(cell);
-
-                    // num of adjacent cells
-                    int neighbours = countNeighbours(cell, index);
-
+                    int neighbours = countNeighbours(index);
                     if (cell.alive) {
-                        if (neighbours < 2) {nextCells.add(new Cell(false));} else if (neighbours == 2 || neighbours == 3) {
-                            nextCells.add(new Cell(true));
+                        if (neighbours < 2) {nextGenerationCells.add(new Cell(false));} else if (neighbours == 2 || neighbours == 3) {
+                            nextGenerationCells.add(new Cell(true));
                         } else if (neighbours > 3) {
-                            nextCells.add(new Cell(false));
+                            nextGenerationCells.add(new Cell(false));
                         }
-                    } else if (neighbours == 3) {nextCells.add(new Cell(true));} else {nextCells.add(new Cell(false));}
+                    } else if (neighbours == 3) {nextGenerationCells.add(new Cell(true));} else {nextGenerationCells.add(new Cell(false));}
                 }
-
-
-                generation++;
-
-                System.out.println("Generation: " + generation);
+                System.out.println("Generation: " + generation++);
 
                 // prev cell is equal to next generation
-                cells = nextCells;
+                cells = nextGenerationCells;
                 // call update to print every <interval> milliseconds
-                updateCell();
+                print();
             }
         };
     }
@@ -78,16 +69,10 @@ public class GameOfLife {
         }
     }
 
-
-    public static int countNeighbours(Cell cell, int ind) {
-        // init var to count
+    public static int countNeighbours(int ind) {
         int count = 0;
-
-        // store neighbour pos
         int top = ind + cols;
         int bot = ind - cols;
-
-        // check neighbours and increment count...
 
         // northwest
         if (top - 1 < cells.size() && cells.get(top - 1).alive) {count++;}
@@ -118,8 +103,7 @@ public class GameOfLife {
         }
     }
 
-    public static void updateCell() {
-        // print empty lines
+    public static void print() {
         for (int i = 0; i < rows; i++) {
             System.out.println();
         }
